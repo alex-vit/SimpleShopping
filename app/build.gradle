@@ -20,7 +20,7 @@ android {
         multiDexEnabled true
 
         resValue "string", "dropbox_app_key", DropboxAppKey
-        manifestPlaceholders = [ dropboxScheme: DropboxScheme]
+        resValue "string", "dropbox_scheme", "db-${DropboxAppKey}"
     }
     buildTypes {
         release {

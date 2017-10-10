@@ -1,8 +1,6 @@
 # Usage
 
 1. Create a Dropbox application https://dropbox.com/developers/apps
-2. Copy your app key
-3. Add 2 variables to your home gradle.properties:
+2. Add your app key to your home gradle.properties as
   `DropboxAppKey="YOUR_APP_KEY"`
-  `DropboxScheme="db-YOUR_APP_KEY"`
-4. Build using Android Studio 3 beta 6+.
+3. Build using Android Studio 3 beta 6+.
