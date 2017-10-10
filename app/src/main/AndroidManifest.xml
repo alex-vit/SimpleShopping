@@ -25,6 +25,20 @@
             android:name=".features.addedit.AddEditActivity"
             android:parentActivityName=".features.list.ListActivity"
             android:windowSoftInputMode="adjustResize" />
+        
+        <activity android:name="com.dropbox.core.android.AuthActivity"
+            android:launchMode="singleTask">
+
+            <intent-filter>
+                <data android:scheme="db-ynkjgr2bbdk7q2o" />
+
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.BROWSABLE" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+
+        </activity>
 
     </application>
 

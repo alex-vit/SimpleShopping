@@ -9,6 +9,7 @@ import com.alexvit.simpleshopping.R
 import com.alexvit.simpleshopping.base.BaseActivity
 import com.alexvit.simpleshopping.data.models.Item
 import com.alexvit.simpleshopping.features.addedit.AddEditActivity
+import com.dropbox.core.android.Auth
 import kotlinx.android.synthetic.main.activity_list.*
 
 class ListActivity : BaseActivity<ListViewModel>(), ListAdapter.ItemClickListener {
@@ -21,6 +22,7 @@ class ListActivity : BaseActivity<ListViewModel>(), ListAdapter.ItemClickListene
 
         initRecycler()
         fab_add_item.setOnClickListener { launchAddEditItem() }
+        btn_sign_into_dropbox.setOnClickListener { launchDropboxAuth() }
     }
 
     override fun bind(viewModel: ListViewModel) {
@@ -44,16 +46,20 @@ class ListActivity : BaseActivity<ListViewModel>(), ListAdapter.ItemClickListene
         rv_items.adapter = adapter
     }
 
-    private fun launchAddEditItem() {
-        val intent = Intent(this, AddEditActivity::class.java)
-        startActivity(intent)
-    }
-
     private fun showSignInButton(show: Boolean) {
         val visibility = if (show) View.VISIBLE
         else View.GONE
 
         btn_sign_into_dropbox.visibility = visibility
+    }
+
+    private fun launchAddEditItem() {
+        val intent = Intent(this, AddEditActivity::class.java)
+        startActivity(intent)
+    }
+
+    private fun launchDropboxAuth() {
+        Auth.startOAuth2Authentication(this, resources.getString(R.string.dropbox_app_key))
     }
 
 }

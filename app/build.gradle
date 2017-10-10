@@ -8,7 +8,7 @@ kapt {
 
 android {
     compileSdkVersion 26
-    buildToolsVersion "26.0.1"
+    buildToolsVersion '26.0.2'
     defaultConfig {
         applicationId "com.alexvit.simpleshopping"
         minSdkVersion 21
@@ -16,6 +16,7 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        multiDexEnabled true
     }
     buildTypes {
         release {
@@ -47,12 +48,11 @@ dependencies {
     compile "io.reactivex.rxjava2:rxandroid:$rootProject.rxAndroidVersion"
 
     // Room
-    //noinspection GradleDependency
     compile "android.arch.persistence.room:runtime:$rootProject.roomVersion"
-    //noinspection GradleDependency
     compile "android.arch.persistence.room:rxjava2:$rootProject.roomVersion"
     kapt "android.arch.persistence.room:compiler:$rootProject.roomVersion"
 
     compile "com.squareup.okhttp3:okhttp:$rootProject.okhttpVersion"
+    compile "com.dropbox.core:dropbox-core-sdk:$rootProject.dropboxVersion"
 
 }
