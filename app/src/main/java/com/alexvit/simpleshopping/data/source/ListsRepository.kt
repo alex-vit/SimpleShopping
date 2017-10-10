@@ -20,6 +20,8 @@ class ListsRepository(private val sqlDatasource: ListsSqlDatasource,
         const val DB_NAME = "lists.db"
     }
 
+    private val TAG = ListsRepository::class.java.simpleName
+
     fun getAllItems() = sqlDatasource.getAllItems().toObservable()
 
     fun insert(item: Item) = Observable.fromCallable {
@@ -39,7 +41,7 @@ class ListsRepository(private val sqlDatasource: ListsSqlDatasource,
         if (token == null) {
             return Observable.error<Boolean>(IllegalStateException("no dropbox token set"))
         } else {
-            Log.d("Repo", "local modified = ${Date(dbFile.lastModified())}")
+            Log.d(TAG, "local modified = ${Date(dbFile.lastModified())}")
             return Observable.fromCallable {
                 dropboxDatasource.isRemoteDbNewer(token, DB_NAME, Date(dbFile.lastModified()))
             }
@@ -54,6 +56,18 @@ class ListsRepository(private val sqlDatasource: ListsSqlDatasource,
             Observable.fromCallable {
                 dropboxDatasource.downloadDb(token, DB_NAME, dbFile)
             }
+        }
+    }
+
+    fun uploadDb(): Observable<Unit> {
+        val token = getDropBoxToken()
+        return if (token != null) {
+            Observable.fromCallable {
+                dropboxDatasource.uploadDb(token, dbFile, DB_NAME)
+            }
+        } else {
+            Log.e(TAG, "uploadDb(): token is null")
+            Observable.empty()
         }
     }
 

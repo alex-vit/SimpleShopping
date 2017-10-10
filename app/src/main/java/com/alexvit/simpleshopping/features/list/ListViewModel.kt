@@ -27,6 +27,7 @@ class ListViewModel(private val repository: ListsRepository,
     private val itemsSubject = BehaviorSubject.create<List<Item>>()
     private val itemUpdatesSubject = PublishSubject.create<Pair<Item, Item>>()
     private val showSignIntoDropboxSubject = BehaviorSubject.createDefault(false)
+    private val shouldUploadDbSubject = PublishSubject.create<Boolean>()
 
     init {
         subscribe(repository.getAllItems(), itemsSubject::onNext)
@@ -52,14 +53,20 @@ class ListViewModel(private val repository: ListsRepository,
             .toFlowable(LATEST)
             .toObservable()
 
+    fun shouldUploadDb() = shouldUploadDbSubject
+            .toFlowable(LATEST)
+            .toObservable()
+
     fun check(item: Item, checked: Boolean) {
         val newItem = item.copy(checked = checked)
         itemUpdatesSubject.onNext(Pair(item, newItem))
         subscribe(repository.insert(newItem))
+        shouldUploadDbSubject.onNext(true)
     }
 
     fun delete(item: Item) {
         subscribe(repository.delete(item))
+        shouldUploadDbSubject.onNext(true)
     }
 
     fun saveDropboxToken(token: String) {

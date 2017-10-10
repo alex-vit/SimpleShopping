@@ -27,8 +27,9 @@
             android:name=".features.addedit.AddEditActivity"
             android:parentActivityName=".features.list.ListActivity"
             android:windowSoftInputMode="adjustResize" />
-        
-        <activity android:name="com.dropbox.core.android.AuthActivity"
+
+        <activity
+            android:name="com.dropbox.core.android.AuthActivity"
             android:launchMode="singleTask">
 
             <intent-filter>
@@ -41,6 +42,10 @@
             </intent-filter>
 
         </activity>
+
+        <service
+            android:name=".data.source.dropbox.UploadService"
+            android:permission="android.permission.BIND_JOB_SERVICE" />
 
     </application>
 

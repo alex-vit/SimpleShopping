@@ -6,7 +6,9 @@ import com.dropbox.core.DbxRequestConfig
 import com.dropbox.core.http.OkHttp3Requestor
 import com.dropbox.core.v2.DbxClientV2
 import com.dropbox.core.v2.files.FileMetadata
+import com.dropbox.core.v2.files.WriteMode
 import java.io.File
+import java.io.FileInputStream
 import java.io.FileOutputStream
 import java.util.*
 
@@ -53,6 +55,12 @@ class DropboxDatasource(private val prefs: SharedPreferences) {
             client(token).files().download("/$filename").download(it)
             it.flush()
         }
+    }
+
+    fun uploadDb(token: String, dbFile: File, filename: String) {
+        client(token).files().uploadBuilder("/$filename")
+                .withMode(WriteMode.OVERWRITE)
+                .uploadAndFinish(FileInputStream(dbFile))
     }
 
     private fun client(token: String): DbxClientV2 {

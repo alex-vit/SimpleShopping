@@ -8,6 +8,7 @@ import com.alexvit.simpleshopping.R
 import com.alexvit.simpleshopping.base.BaseActivity
 import com.alexvit.simpleshopping.data.models.Item
 import com.alexvit.simpleshopping.features.addedit.AddEditActivity
+import com.alexvit.simpleshopping.startDbUploadJob
 import com.dropbox.core.android.Auth
 import kotlinx.android.synthetic.main.activity_list.*
 
@@ -36,6 +37,7 @@ class ListActivity : BaseActivity<ListViewModel>(), ListAdapter.ItemClickListene
         subscribe(viewModel.items(), adapter::addAll)
         subscribe(viewModel.itemUpdates(), { (old, new) -> adapter.update(old, new) })
         subscribe(viewModel.showSignIntoDropbox(), this::showSignInButton)
+        subscribe(viewModel.shouldUploadDb(), { startDbUploadJob() })
     }
 
     override fun getViewModelFromComponent(): ListViewModel = component.listViewModel()
