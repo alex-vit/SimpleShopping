@@ -51,4 +51,9 @@ class ListViewModel(private val repository: ListsRepository) : BaseViewModel() {
     fun delete(item: Item) {
         subscribe(repository.delete(item))
     }
+
+    fun saveDropboxToken(token: String) {
+        repository.setDropBoxToken(token)
+        showSignIntoDropboxSubject.onNext(false)
+    }
 }

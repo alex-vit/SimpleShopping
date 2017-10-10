@@ -14,6 +14,8 @@ import kotlinx.android.synthetic.main.activity_list.*
 
 class ListActivity : BaseActivity<ListViewModel>(), ListAdapter.ItemClickListener {
 
+    val TAG = ListActivity::class.java.simpleName
+
     val adapter by lazy { ListAdapter(this) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -23,6 +25,12 @@ class ListActivity : BaseActivity<ListViewModel>(), ListAdapter.ItemClickListene
         initRecycler()
         fab_add_item.setOnClickListener { launchAddEditItem() }
         btn_sign_into_dropbox.setOnClickListener { launchDropboxAuth() }
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        saveToken(Auth.getOAuth2Token())
     }
 
     override fun bind(viewModel: ListViewModel) {
@@ -60,6 +68,13 @@ class ListActivity : BaseActivity<ListViewModel>(), ListAdapter.ItemClickListene
 
     private fun launchDropboxAuth() {
         Auth.startOAuth2Authentication(this, resources.getString(R.string.dropbox_app_key))
+    }
+
+    private fun saveToken(token: String?) {
+        if (token != null) {
+            Log.d(TAG, "Got token = $token")
+            viewModel.saveDropboxToken(token)
+        }
     }
 
 }

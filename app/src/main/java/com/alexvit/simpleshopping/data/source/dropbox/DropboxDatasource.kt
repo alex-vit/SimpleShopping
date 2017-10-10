@@ -14,7 +14,7 @@ class DropboxDatasource (private val prefs: SharedPreferences) {
 
     fun getToken() = prefs.getString(PREF_DROPBOX_TOKEN, null)
 
-    fun setToken(token: String) = prefs.edit()
+    fun setToken(token: String?) = prefs.edit()
             .putString(PREF_DROPBOX_TOKEN, token)
             .apply()
 }

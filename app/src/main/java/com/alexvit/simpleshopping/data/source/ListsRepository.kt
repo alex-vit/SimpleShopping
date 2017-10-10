@@ -24,4 +24,6 @@ class ListsRepository(private val sqlDatasource: ListsSqlDatasource,
 
     fun getDropBoxToken(): String? = dropboxDatasource.getToken()
 
+    fun setDropBoxToken(token: String) = dropboxDatasource.setToken(token)
+
 }
