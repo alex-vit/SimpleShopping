@@ -3,7 +3,6 @@ package com.alexvit.simpleshopping.features.list
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
-import android.util.Log
 import android.view.View
 import com.alexvit.simpleshopping.R
 import com.alexvit.simpleshopping.base.BaseActivity
@@ -72,7 +71,6 @@ class ListActivity : BaseActivity<ListViewModel>(), ListAdapter.ItemClickListene
 
     private fun saveToken(token: String?) {
         if (token != null) {
-            Log.d(TAG, "Got token = $token")
             viewModel.saveDropboxToken(token)
         }
     }
