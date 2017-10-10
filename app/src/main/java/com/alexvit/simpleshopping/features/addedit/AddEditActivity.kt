@@ -5,6 +5,7 @@ import android.view.inputmethod.EditorInfo
 import com.alexvit.simpleshopping.R
 import com.alexvit.simpleshopping.base.BaseActivity
 import com.alexvit.simpleshopping.data.models.Item
+import com.alexvit.simpleshopping.startDbUploadJob
 import kotlinx.android.synthetic.main.activity_add_edit.*
 
 class AddEditActivity : BaseActivity<AddEditViewModel>() {
@@ -28,7 +29,10 @@ class AddEditActivity : BaseActivity<AddEditViewModel>() {
     override fun getViewModelFromComponent(): AddEditViewModel = component.addEditViewModel()
 
     override fun bind(viewModel: AddEditViewModel) {
-        subscribe(viewModel.saved(), { finish() })
+        subscribe(viewModel.saved(), {
+            startDbUploadJob()
+            finish()
+        })
     }
 
     private fun addItem() {
