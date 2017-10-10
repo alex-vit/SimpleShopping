@@ -1,10 +1,12 @@
 package com.alexvit.simpleshopping.features.list
 
+import android.util.Log
 import com.alexvit.simpleshopping.base.BaseViewModel
 import com.alexvit.simpleshopping.data.models.Item
 import com.alexvit.simpleshopping.data.source.ListsRepository
 import io.reactivex.BackpressureStrategy.BUFFER
 import io.reactivex.BackpressureStrategy.LATEST
+import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.BehaviorSubject
@@ -25,6 +27,8 @@ class ListViewModel(private val repository: ListsRepository) : BaseViewModel() {
 
         if (repository.getDropBoxToken() == null) {
             showSignIntoDropboxSubject.onNext(true)
+        } else {
+            downloadDb()
         }
     }
 
@@ -55,5 +59,26 @@ class ListViewModel(private val repository: ListsRepository) : BaseViewModel() {
     fun saveDropboxToken(token: String) {
         repository.setDropBoxToken(token)
         showSignIntoDropboxSubject.onNext(false)
+    }
+
+    private fun downloadDb() {
+
+        val o = repository.isRemoteDbNewer()
+                .flatMap { newer ->
+                    if (newer) {
+                        Log.d("VM", "remote db newer, downloading")
+                        repository.downloadDb()
+                    } else {
+                        Log.d("VM", "remote db older, skipping")
+                        Observable.empty()
+                    }
+                }.doOnComplete(this::reload)
+
+        subscribe(o)
+    }
+
+    private fun reload() {
+        compositeSub.clear()
+        subscribe(repository.getAllItems(), itemsSubject::onNext)
     }
 }

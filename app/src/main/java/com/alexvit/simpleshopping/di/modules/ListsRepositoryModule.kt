@@ -10,6 +10,7 @@ import com.alexvit.simpleshopping.di.qualifiers.ApplicationContext
 import com.alexvit.simpleshopping.di.scopes.ApplicationScope
 import dagger.Module
 import dagger.Provides
+import java.io.File
 
 /**
  * Created by Aleksandrs Vitjukovs on 10/8/2017.
@@ -20,8 +21,10 @@ class ListsRepositoryModule {
 
     @Provides
     @ApplicationScope
-    fun listsRepository(sqlDatasource: ListsSqlDatasource, dropboxDatasource: DropboxDatasource) =
-            ListsRepository(sqlDatasource, dropboxDatasource)
+    fun listsRepository(sqlDatasource: ListsSqlDatasource,
+                        dropboxDatasource: DropboxDatasource,
+                        dbFile: File) =
+            ListsRepository(sqlDatasource, dropboxDatasource, dbFile)
 
     @Provides
     @ApplicationScope
@@ -32,5 +35,10 @@ class ListsRepositoryModule {
     fun listsDatabase(@ApplicationContext context: Context): ListsDatabase =
             Room.databaseBuilder(context, ListsDatabase::class.java, "lists.db")
                     .build()
+
+    @Provides
+    @ApplicationScope
+    fun dbFile(@ApplicationContext context: Context): File =
+            context.getDatabasePath("lists.db")
 
 }
