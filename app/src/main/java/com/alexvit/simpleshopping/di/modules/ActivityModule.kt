@@ -1,5 +1,6 @@
 package com.alexvit.simpleshopping.di.modules
 
+import android.content.SharedPreferences
 import com.alexvit.simpleshopping.data.source.ListsRepository
 import com.alexvit.simpleshopping.di.scopes.ActivityScope
 import com.alexvit.simpleshopping.features.addedit.AddEditViewModel
@@ -16,7 +17,8 @@ class ActivityModule {
 
     @Provides
     @ActivityScope
-    fun listViewModel(listsRepository: ListsRepository) = ListViewModel(listsRepository)
+    fun listViewModel(listsRepository: ListsRepository, prefs: SharedPreferences) =
+            ListViewModel(listsRepository, prefs)
 
     @Provides
     @ActivityScope

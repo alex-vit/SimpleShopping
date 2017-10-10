@@ -1,5 +1,6 @@
 package com.alexvit.simpleshopping.features.list
 
+import android.content.SharedPreferences
 import android.util.Log
 import com.alexvit.simpleshopping.base.BaseViewModel
 import com.alexvit.simpleshopping.data.models.Item
@@ -16,7 +17,12 @@ import io.reactivex.subjects.PublishSubject
  * Created by Aleksandrs Vitjukovs on 10/8/2017.
  */
 
-class ListViewModel(private val repository: ListsRepository) : BaseViewModel() {
+class ListViewModel(private val repository: ListsRepository,
+                    private val prefs: SharedPreferences) : BaseViewModel() {
+
+    companion object {
+        const val PREF_SETUP_COMPLETE = "PREF_SETUP_COMPLETE"
+    }
 
     private val itemsSubject = BehaviorSubject.create<List<Item>>()
     private val itemUpdatesSubject = PublishSubject.create<Pair<Item, Item>>()
@@ -59,22 +65,30 @@ class ListViewModel(private val repository: ListsRepository) : BaseViewModel() {
     fun saveDropboxToken(token: String) {
         repository.setDropBoxToken(token)
         showSignIntoDropboxSubject.onNext(false)
+        downloadDb()
     }
 
     private fun downloadDb() {
 
-        val o = repository.isRemoteDbNewer()
-                .flatMap { newer ->
-                    if (newer) {
-                        Log.d("VM", "remote db newer, downloading")
-                        repository.downloadDb()
-                    } else {
-                        Log.d("VM", "remote db older, skipping")
-                        Observable.empty()
+        val isSetupComplete = prefs.getBoolean(PREF_SETUP_COMPLETE, false)
+        val obs = if (isSetupComplete) {
+            repository.isRemoteDbNewer()
+                    .flatMap { newer ->
+                        if (newer) {
+                            Log.d("VM", "remote db newer, downloading")
+                            repository.downloadDb()
+                        } else {
+                            Log.d("VM", "remote db older, skipping")
+                            Observable.empty()
+                        }
                     }
-                }.doOnComplete(this::reload)
+        } else {
+            Log.d("VM", "first time, always download")
+            prefs.edit().putBoolean(PREF_SETUP_COMPLETE, true).apply()
+            repository.downloadDb()
+        }.doOnComplete(this::reload)
 
-        subscribe(o)
+        subscribe(obs)
     }
 
     private fun reload() {
