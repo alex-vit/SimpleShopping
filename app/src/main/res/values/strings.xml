@@ -3,5 +3,4 @@
     <string name="label_add_item">Add item</string>
     <string name="delete">Delete</string>
     <string name="explanation_sign_into_dropbox">To sync your list, sign in to Dropbox</string>
-    <string name="dropbox_app_key">ynkjgr2bbdk7q2o</string>
 </resources>

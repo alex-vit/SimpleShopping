@@ -33,7 +33,7 @@
             android:launchMode="singleTask">
 
             <intent-filter>
-                <data android:scheme="db-ynkjgr2bbdk7q2o" />
+                <data android:scheme="${dropboxScheme}" />
 
                 <action android:name="android.intent.action.VIEW" />
 
