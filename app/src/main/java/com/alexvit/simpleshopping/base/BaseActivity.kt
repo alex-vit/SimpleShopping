@@ -24,16 +24,22 @@ abstract class BaseActivity<ViewModel> : AppCompatActivity() where ViewModel : B
     }
     protected val compositeSub = CompositeDisposable()
 
-    protected lateinit var viewmodelFragment: ViewModelFragment<ViewModel>
+    protected lateinit var viewModelFragment: ViewModelFragment<ViewModel>
 
-    protected lateinit var viewmodel: ViewModel
+    protected lateinit var viewModel: ViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        viewmodelFragment = getOrCreateVmFragment()
-        viewmodel = getViewModel(viewmodelFragment)
-        bind(viewmodel)
+        viewModelFragment = getOrCreateVmFragment()
+        viewModel = getViewModel(viewModelFragment)
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        compositeSub.clear()
+        bind(viewModel)
     }
 
     override fun onDestroy() {
@@ -41,7 +47,7 @@ abstract class BaseActivity<ViewModel> : AppCompatActivity() where ViewModel : B
 
         compositeSub.clear()
         if (isFinishing) {
-            viewmodel.onDestroy()
+            viewModel.onDestroy()
         }
     }
 

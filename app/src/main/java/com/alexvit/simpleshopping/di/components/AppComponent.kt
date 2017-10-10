@@ -1,6 +1,7 @@
 package com.alexvit.simpleshopping.di.components
 
 import android.content.Context
+import android.content.SharedPreferences
 import com.alexvit.simpleshopping.data.source.ListsRepository
 import com.alexvit.simpleshopping.di.modules.AppModule
 import com.alexvit.simpleshopping.di.modules.ListsRepositoryModule
@@ -20,5 +21,7 @@ interface AppComponent {
     fun context(): Context
 
     fun listsRepository(): ListsRepository
+
+    fun preferences(): SharedPreferences
 
 }

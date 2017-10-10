@@ -33,6 +33,6 @@ class AddEditActivity : BaseActivity<AddEditViewModel>() {
 
     private fun addItem() {
         val item = Item(title = et_item_title.text.toString())
-        viewmodel.insert(item)
+        viewModel.insert(item)
     }
 }

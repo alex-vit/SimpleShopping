@@ -14,13 +14,18 @@ import io.reactivex.subjects.PublishSubject
  * Created by Aleksandrs Vitjukovs on 10/8/2017.
  */
 
-class ListViewModel(private val listsRepository: ListsRepository) : BaseViewModel() {
+class ListViewModel(private val repository: ListsRepository) : BaseViewModel() {
 
     private val itemsSubject = BehaviorSubject.create<List<Item>>()
     private val itemUpdatesSubject = PublishSubject.create<Pair<Item, Item>>()
+    private val showSignIntoDropboxSubject = BehaviorSubject.createDefault(false)
 
     init {
-        subscribe(listsRepository.getAllItems(), itemsSubject::onNext)
+        subscribe(repository.getAllItems(), itemsSubject::onNext)
+
+        if (repository.getDropBoxToken() == null) {
+            showSignIntoDropboxSubject.onNext(true)
+        }
     }
 
     fun items() = itemsSubject
@@ -33,13 +38,17 @@ class ListViewModel(private val listsRepository: ListsRepository) : BaseViewMode
             .toFlowable(BUFFER)
             .toObservable()
 
+    fun showSignIntoDropbox() = showSignIntoDropboxSubject
+            .toFlowable(LATEST)
+            .toObservable()
+
     fun check(item: Item, checked: Boolean) {
         val newItem = item.copy(checked = checked)
         itemUpdatesSubject.onNext(Pair(item, newItem))
-        subscribe(listsRepository.insert(newItem))
+        subscribe(repository.insert(newItem))
     }
 
     fun delete(item: Item) {
-        subscribe(listsRepository.delete(item))
+        subscribe(repository.delete(item))
     }
 }

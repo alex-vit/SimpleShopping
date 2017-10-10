@@ -22,8 +22,17 @@
         android:layout_margin="@dimen/padding_s"
         android:src="@drawable/ic_add"
         app:fabSize="normal"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/btn_sign_into_dropbox"
         app:layout_constraintRight_toRightOf="parent" />
 
+    <Button
+        android:id="@+id/btn_sign_into_dropbox"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/explanation_sign_into_dropbox"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent" />
 
 </android.support.constraint.ConstraintLayout>

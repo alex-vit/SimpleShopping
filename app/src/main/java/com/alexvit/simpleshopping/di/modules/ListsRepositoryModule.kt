@@ -3,6 +3,7 @@ package com.alexvit.simpleshopping.di.modules
 import android.arch.persistence.room.Room
 import android.content.Context
 import com.alexvit.simpleshopping.data.source.ListsRepository
+import com.alexvit.simpleshopping.data.source.dropbox.DropboxDatasource
 import com.alexvit.simpleshopping.data.source.sql.ListsDatabase
 import com.alexvit.simpleshopping.data.source.sql.ListsSqlDatasource
 import com.alexvit.simpleshopping.di.qualifiers.ApplicationContext
@@ -14,12 +15,13 @@ import dagger.Provides
  * Created by Aleksandrs Vitjukovs on 10/8/2017.
  */
 
-@Module
+@Module(includes = arrayOf(DropboxModule::class))
 class ListsRepositoryModule {
 
     @Provides
     @ApplicationScope
-    fun listsRepository(sqlDatasource: ListsSqlDatasource) = ListsRepository(sqlDatasource)
+    fun listsRepository(sqlDatasource: ListsSqlDatasource, dropboxDatasource: DropboxDatasource) =
+            ListsRepository(sqlDatasource, dropboxDatasource)
 
     @Provides
     @ApplicationScope

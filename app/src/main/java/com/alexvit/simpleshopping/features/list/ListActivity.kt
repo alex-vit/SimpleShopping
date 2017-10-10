@@ -3,6 +3,8 @@ package com.alexvit.simpleshopping.features.list
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
+import android.util.Log
+import android.view.View
 import com.alexvit.simpleshopping.R
 import com.alexvit.simpleshopping.base.BaseActivity
 import com.alexvit.simpleshopping.data.models.Item
@@ -23,20 +25,18 @@ class ListActivity : BaseActivity<ListViewModel>(), ListAdapter.ItemClickListene
 
     override fun bind(viewModel: ListViewModel) {
         subscribe(viewModel.items(), adapter::addAll)
-        subscribe(viewModel.itemUpdates(), {
-            (old, new) ->
-            adapter.update(old, new)
-        })
+        subscribe(viewModel.itemUpdates(), { (old, new) -> adapter.update(old, new) })
+        subscribe(viewModel.showSignIntoDropbox(), this::showSignInButton)
     }
 
     override fun getViewModelFromComponent(): ListViewModel = component.listViewModel()
 
     override fun onChecked(item: Item, checked: Boolean) {
-        viewmodel.check(item, checked)
+        viewModel.check(item, checked)
     }
 
     override fun onDelete(item: Item) {
-        viewmodel.delete(item)
+        viewModel.delete(item)
     }
 
     private fun initRecycler() {
@@ -47,6 +47,13 @@ class ListActivity : BaseActivity<ListViewModel>(), ListAdapter.ItemClickListene
     private fun launchAddEditItem() {
         val intent = Intent(this, AddEditActivity::class.java)
         startActivity(intent)
+    }
+
+    private fun showSignInButton(show: Boolean) {
+        val visibility = if (show) View.VISIBLE
+        else View.GONE
+
+        btn_sign_into_dropbox.visibility = visibility
     }
 
 }
