@@ -54,7 +54,7 @@ class ListsRepository(private val sqlDatasource: ListsSqlDatasource,
             Observable.error<Unit>(IllegalStateException("no dropbox token set"))
         } else {
             Observable.fromCallable {
-                dropboxDatasource.downloadDb(token, DB_NAME, dbFile)
+                dropboxDatasource.downloadDbIfExists(token, DB_NAME, dbFile)
             }
         }
     }

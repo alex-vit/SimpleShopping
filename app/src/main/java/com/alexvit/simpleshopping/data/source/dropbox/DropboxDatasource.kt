@@ -35,25 +35,31 @@ class DropboxDatasource(private val prefs: SharedPreferences) {
             .apply()
 
     fun isRemoteDbNewer(token: String, filename: String, modified: Date): Boolean {
-        try {
-            val meta = client(token).files().getMetadata("/$filename")
-            return when (meta) {
-                is FileMetadata -> {
-                    Log.d("DropboxDS", "remote modified = ${meta.serverModified}")
-                    modified.before(meta.serverModified)
-                }
-                else -> false
-            }
-        } catch (e: Exception) {
+        val meta = getFileMetaData(token, filename)
+
+        if (meta == null) {
+            Log.d("DropboxDs", "remote file doesn't exist")
             return false
+        } else {
+            Log.d("DropboxDS", "local modified = $modified, remote modified = ${meta.clientModified}")
+            return modified.before(meta.clientModified)
         }
     }
+
+    fun doesRemoteDbExist(token: String, filename: String) =
+            getFileMetaData(token, filename) != null
 
     fun downloadDb(token: String, filename: String, dbFile: File) {
         val out = FileOutputStream(dbFile)
         out.use {
             client(token).files().download("/$filename").download(it)
             it.flush()
+        }
+    }
+
+    fun downloadDbIfExists(token: String, filename: String, dbFile: File) {
+        if (doesRemoteDbExist(token, filename)) {
+            downloadDb(token, filename, dbFile)
         }
     }
 
@@ -65,5 +71,13 @@ class DropboxDatasource(private val prefs: SharedPreferences) {
 
     private fun client(token: String): DbxClientV2 {
         return DbxClientV2(config, token)
+    }
+
+    private fun getFileMetaData(token: String, filename: String): FileMetadata? {
+        try {
+            return client(token).files().getMetadata("/$filename") as? FileMetadata
+        } catch (e: Exception) {
+            return null
+        }
     }
 }
