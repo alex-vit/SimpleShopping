@@ -17,8 +17,8 @@ import io.reactivex.disposables.CompositeDisposable
 class UploadService : JobService() {
 
     companion object {
-        const val MIN: Long = 10 * 1000
-        const val MAX: Long = 60 * 1000
+        const val MIN: Long = 30 * 1000
+        const val MAX: Long = 120 * 1000
 
         fun schedule(context: Context) {
             val component = ComponentName(context, UploadService::class.java)
