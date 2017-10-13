@@ -9,6 +9,7 @@ import android.content.Context
 import android.util.Log
 import com.alexvit.simpleshopping.App
 import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.schedulers.Schedulers
 
 /**
  * Created by alexander.vitjukov on 10.10.2017.
@@ -40,7 +41,9 @@ class UploadService : JobService() {
 
     override fun onStartJob(p0: JobParameters?): Boolean {
         val repo = App.get(applicationContext).appComponent.listsRepository()
-        val sub = repo.uploadDb().subscribe()
+        val sub = repo.uploadDb()
+                .subscribeOn(Schedulers.io())
+                .subscribe()
         compositeSub.add(sub)
         Log.d(TAG, "Job started")
         return true

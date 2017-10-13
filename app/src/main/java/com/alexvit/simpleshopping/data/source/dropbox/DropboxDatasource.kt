@@ -22,6 +22,8 @@ class DropboxDatasource(private val prefs: SharedPreferences) {
         const val PREF_DROPBOX_TOKEN = "PREF_DROPBOX_TOKEN"
     }
 
+    private val TAG = DropboxDatasource::class.java.simpleName
+
     private val config by lazy {
         DbxRequestConfig.newBuilder("Simple Shopping")
                 .withHttpRequestor(OkHttp3Requestor(OkHttp3Requestor.defaultOkHttpClient()))
@@ -38,10 +40,10 @@ class DropboxDatasource(private val prefs: SharedPreferences) {
         val meta = getFileMetaData(token, filename)
 
         if (meta == null) {
-            Log.d("DropboxDs", "remote file doesn't exist")
+            Log.d(TAG, "remote file doesn't exist")
             return false
         } else {
-            Log.d("DropboxDS", "local modified = $modified, remote modified = ${meta.clientModified}")
+            Log.d(TAG, "local modified = $modified, remote modified = ${meta.clientModified}")
             return modified.before(meta.clientModified)
         }
     }
