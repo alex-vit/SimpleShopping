@@ -74,9 +74,11 @@ class ListAdapter(val itemClickListener: ItemClickListener) : RecyclerView.Adapt
     class SortedListCallback(val rv: RecyclerView.Adapter<ListItemViewHolder>) : SortedList.Callback<Item>() {
 
         private val comparator: Comparator<Item> = Comparator { a, b ->
-            val c = a.checked.compareTo(b.checked)
-            if (c == 0) (a.title ?: "").compareTo(b.title ?: "")
-            else c
+            val compareChecked = a.checked.compareTo(b.checked)
+            val compareTitle = (a.title ?: "").compareTo(b.title ?: "")
+            val compareId = (a.id ?: 0).compareTo(b.id ?: 0)
+
+            listOf(compareChecked, compareTitle, compareId).find { it != 0 } ?: 0
         }
 
         override fun onChanged(position: Int, count: Int) {
