@@ -8,6 +8,7 @@ import android.content.ComponentName
 import android.content.Context
 import android.util.Log
 import com.alexvit.simpleshopping.App
+import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 
@@ -42,6 +43,10 @@ class UploadService : JobService() {
     override fun onStartJob(p0: JobParameters?): Boolean {
         val repo = App.get(applicationContext).appComponent.listsRepository()
         val sub = repo.uploadDb()
+                .onErrorResumeNext { t: Throwable ->
+                    onError(t)
+                    Observable.empty<Unit>()
+                }
                 .subscribeOn(Schedulers.io())
                 .subscribe()
         compositeSub.add(sub)
@@ -54,5 +59,9 @@ class UploadService : JobService() {
         compositeSub.clear()
         Log.d(TAG, "Job stopped")
         return false
+    }
+
+    private fun onError(t: Throwable) {
+        Log.e(TAG, t.message)
     }
 }
