@@ -15,7 +15,8 @@ class AddEditViewModel(private val listsRepository: ListsRepository) : BaseViewM
     private val savedSubject = BehaviorSubject.create<Boolean>()
 
     fun insert(item: Item) {
-        subscribe(listsRepository.insert(item), { savedSubject.onNext(true) })
+        subscribe(listsRepository.insert(item))
+        savedSubject.onNext(true)
     }
 
     fun saved() = savedSubject.toFlowable(BackpressureStrategy.LATEST).toObservable()
