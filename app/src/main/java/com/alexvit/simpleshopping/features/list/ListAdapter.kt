@@ -27,7 +27,7 @@ class ListAdapter(val itemClickListener: ItemClickListener) : RecyclerView.Adapt
 
         holder?.itemView?.checkbox_complete?.setOnCheckedChangeListener(null)
         holder?.itemView?.checkbox_complete?.isChecked = item.checked
-        holder?.itemView?.checkbox_complete?.setOnCheckedChangeListener { compoundButton, bool ->
+        holder?.itemView?.checkbox_complete?.setOnCheckedChangeListener { _, bool ->
             itemClickListener.onChecked(item, bool)
         }
 
