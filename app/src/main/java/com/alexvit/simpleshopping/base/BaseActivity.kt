@@ -42,15 +42,6 @@ abstract class BaseActivity<ViewModel> : AppCompatActivity() where ViewModel : B
         bind(viewModel)
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-
-        compositeSub.clear()
-        if (isFinishing) {
-            viewModel.onDestroy()
-        }
-    }
-
     protected fun <T> subscribe(
             observable: Observable<T>,
             onNext: (T) -> Unit,
@@ -79,12 +70,12 @@ abstract class BaseActivity<ViewModel> : AppCompatActivity() where ViewModel : B
     }
 
     private fun getViewModel(fragment: ViewModelFragment<ViewModel>): ViewModel {
-        if (fragment.viewmodel == null) {
+        if (fragment.viewModel == null) {
             val vm = getViewModelFromComponent()
-            fragment.viewmodel = vm
+            fragment.viewModel = vm
             return vm
         } else {
-            return fragment.viewmodel as ViewModel
+            return fragment.viewModel as ViewModel
         }
     }
 }
