@@ -7,7 +7,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.0.0-rc2'
+        classpath 'com.android.tools.build:gradle:3.0.0-rc1'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
 
         // NOTE: Do not place your application dependencies here; they belong
@@ -32,7 +32,7 @@ ext {
     dagger2Version = '2.11'
     dropboxVersion = '3.0.5'
     okhttpVersion = '3.9.0'
-    roomVersion = '1.0.0-beta1'
+    roomVersion = '1.0.0-rc1'
     rxAndroidVersion = '2.0.1'
     rxjavaVersion = '2.1.3'
 }

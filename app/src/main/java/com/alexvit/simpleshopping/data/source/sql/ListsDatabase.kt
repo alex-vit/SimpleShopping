@@ -9,7 +9,7 @@ import com.alexvit.simpleshopping.data.source.sql.dao.ListsDao
  * Created by Aleksandrs Vitjukovs on 10/8/2017.
  */
 
-@Database(entities = arrayOf(Item::class), version = 1)
+@Database(entities = arrayOf(Item::class), version = 1, exportSchema = false)
 abstract class ListsDatabase : RoomDatabase() {
     abstract fun listsDao(): ListsDao
 }

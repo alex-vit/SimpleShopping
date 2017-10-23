@@ -16,7 +16,7 @@ class AddEditActivity : BaseActivity<AddEditViewModel>() {
 
         title = getString(R.string.label_add_item)
 
-        et_item_title.setOnEditorActionListener { textView, i, keyEvent ->
+        et_item_title.setOnEditorActionListener { _, i, _ ->
             if (i == EditorInfo.IME_ACTION_DONE) {
                 addItem()
                 true
